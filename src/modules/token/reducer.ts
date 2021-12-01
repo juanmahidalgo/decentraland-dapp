@@ -3,8 +3,8 @@ import {
   GET_TOKEN_BALANCE_REQUEST,
   GET_TOKEN_BALANCE_SUCESSS,
   GET_TOKEN_BALANCE_FAILURE,
-  GetDummyBalanceSuccessAction,
-  GetDummyBalanceFailureAction,
+  GetBalanceSuccessAction,
+  GetBalanceFailureAction,
 } from './actions'
 import { TokenState } from './types'
 
@@ -27,8 +27,7 @@ export function tokenReducer(
       }
     }
     case GET_TOKEN_BALANCE_SUCESSS: {
-      const { balance } =
-        action.payload as GetDummyBalanceSuccessAction['payload']
+      const { balance } = action.payload as GetBalanceSuccessAction['payload']
       return {
         ...state,
         isFetching: false,
@@ -38,8 +37,7 @@ export function tokenReducer(
     }
 
     case GET_TOKEN_BALANCE_FAILURE: {
-      const { error } =
-        action.payload as GetDummyBalanceFailureAction['payload']
+      const { error } = action.payload as GetBalanceFailureAction['payload']
       return {
         ...state,
         isFetching: false,

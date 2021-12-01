@@ -30,12 +30,12 @@ export function getDummyTokenBalanceFailure(error: string) {
 }
 
 // Token Balance
-export type GetDummyBalanceRequestAction = ReturnType<
+export type GetBalanceRequestAction = ReturnType<
   typeof getDummyTokenBalanceRequest
 >
-export type GetDummyBalanceSuccessAction = ReturnType<
+export type GetBalanceSuccessAction = ReturnType<
   typeof getDummyTokenBalanceSuccess
 >
-export type GetDummyBalanceFailureAction = ReturnType<
+export type GetBalanceFailureAction = ReturnType<
   typeof getDummyTokenBalanceFailure
 >
