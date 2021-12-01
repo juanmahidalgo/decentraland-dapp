@@ -1,8 +1,9 @@
 import React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { Button, Field, Loader, Modal } from 'decentraland-ui'
+import { Button, Field, Modal } from 'decentraland-ui'
 import { Props } from './TokenTransferModal.types'
 import './TokenTransferModal.css'
+import { ETH_ADDRESS_REGEX } from '../../utils/address'
 
 type Inputs = {
   amount: string
@@ -25,6 +26,24 @@ const App: React.FC<Props> = ({ opened, onClose }) => {
     setIsTransferring(true)
   }
 
+  const amountFieldErrors = !!errors.amount
+    ? {
+        message:
+          errors.amount.type === 'required'
+            ? 'Please enter the amount to transfer'
+            : 'Amount must be positive',
+      }
+    : {}
+
+  const addressFieldErrors = !!errors.address
+    ? {
+        message:
+          errors.address.type === 'required'
+            ? 'Please enter the address to transfer'
+            : 'Please enter a valid ETH address',
+      }
+    : {}
+
   return (
     <Modal size="small" open={opened} onClose={onClose}>
       <Modal.Header>Transfer</Modal.Header>
@@ -33,16 +52,19 @@ const App: React.FC<Props> = ({ opened, onClose }) => {
           <Controller
             name="amount"
             control={control}
-            rules={{ required: true }}
+            rules={{
+              required: true,
+              validate: {
+                valid: (v) => !isNaN(parseInt(v)) && parseInt(v) > 0,
+              },
+            }}
             defaultValue=""
             render={({ field }) => (
               <Field
                 label="Amount"
                 placeholder="100"
                 {...field}
-                {...(!!errors.amount
-                  ? { message: 'Please enter the amount to transfer' }
-                  : {})}
+                {...amountFieldErrors}
                 error={!!errors.amount}
               />
             )}
@@ -51,16 +73,14 @@ const App: React.FC<Props> = ({ opened, onClose }) => {
         <Controller
           name="address"
           control={control}
-          rules={{ required: true }}
+          rules={{ required: true, pattern: ETH_ADDRESS_REGEX }}
           defaultValue=""
           render={({ field }) => (
             <Field
               label="Address"
               type="address"
               placeholder="0x..."
-              {...(!!errors.address
-                ? { message: 'Please enter the address to transfer' }
-                : {})}
+              {...addressFieldErrors}
               error={!!errors.address}
               {...field}
             />
@@ -72,8 +92,9 @@ const App: React.FC<Props> = ({ opened, onClose }) => {
           primary
           className="loading-spinner"
           onClick={handleSubmit(onTransferHandler)}
+          loading={isTransferring}
         >
-          {isTransferring ? <Loader active size="mini" /> : 'SEND'}
+          SEND
         </Button>
       </Modal.Actions>
     </Modal>
