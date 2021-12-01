@@ -19,7 +19,7 @@ export type TransferModal = {
 }
 
 export type TransfersState = {
-  transfers: Transfer[]
+  transfers: Transfer[] // storing an array of Transfers because I thought it would be nice to show a history of the toke transfers if I have some time.
   modal: TransferModal
 }
 
