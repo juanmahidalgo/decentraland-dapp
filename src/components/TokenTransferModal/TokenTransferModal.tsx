@@ -1,29 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Button, Field, Modal } from 'decentraland-ui'
 import { Props } from './TokenTransferModal.types'
-import './TokenTransferModal.css'
 import { ETH_ADDRESS_REGEX } from '../../utils/address'
+import { Transfer, TransferStatus } from '../../modules/transfer/types'
 
 type Inputs = {
   amount: string
   address: string
 }
 
-const App: React.FC<Props> = ({ opened, onClose }) => {
+const TokenTransferModal: React.FC<Props> = ({
+  opened,
+  onClose,
+  onTransfer,
+}) => {
+  const [showLoading, setShowLoading] = useState(false)
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<Inputs>()
-  // TODO move the state to redux
-  console.log('errors: ', errors)
-  const [isTransferring, setIsTransferring] = React.useState(false)
+
   const onTransferHandler: SubmitHandler<Inputs> = (data) => {
-    console.log('data: ', data)
-    // disptach action
-    console.log('transferring')
-    setIsTransferring(true)
+    const { amount, address } = data
+    onTransfer(amount, address)
+    setShowLoading(true)
   }
 
   const amountFieldErrors = !!errors.amount
@@ -90,9 +92,8 @@ const App: React.FC<Props> = ({ opened, onClose }) => {
       <Modal.Actions>
         <Button
           primary
-          className="loading-spinner"
           onClick={handleSubmit(onTransferHandler)}
-          loading={isTransferring}
+          loading={showLoading}
         >
           SEND
         </Button>
@@ -101,4 +102,4 @@ const App: React.FC<Props> = ({ opened, onClose }) => {
   )
 }
 
-export default App
+export default TokenTransferModal

@@ -13,6 +13,11 @@ import {
   getDummyBalance,
   getIsFetchingDummyTokenBalance,
 } from '../../modules/token/selectors'
+import {
+  getIsTransferModalOpened,
+  getPendingTransfers,
+} from '../../modules/transfer/selectors'
+import { toggleTransferModalRequest } from '../../modules/transfer/actions'
 
 const mapState = (state: RootState): MapStateProps => ({
   address: getAddress(state),
@@ -21,10 +26,14 @@ const mapState = (state: RootState): MapStateProps => ({
   error: getError(state),
   dummyBalance: getDummyBalance(state),
   isFetchingDummyTokenBalance: getIsFetchingDummyTokenBalance(state),
+  pendingTransactions: getPendingTransfers(state),
+  isTransferModalOpened: getIsTransferModalOpened(state),
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onConnect: () => dispatch(connectWalletRequest()),
+  onOpenTransferModal: (opened: boolean) =>
+    dispatch(toggleTransferModalRequest(opened)),
 })
 
 export default connect(mapState, mapDispatch)(App)

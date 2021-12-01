@@ -3,6 +3,7 @@ export const GET_TOKEN_BALANCE_REQUEST = '[Request] Get Dummy Token Balance'
 export const GET_TOKEN_BALANCE_SUCESSS = '[Success] Get Dummy Token Balance'
 export const GET_TOKEN_BALANCE_FAILURE = '[Failure] Get Dummy Token Balance'
 
+// Token Balance
 export function getDummyTokenBalanceRequest() {
   return {
     type: GET_TOKEN_BALANCE_REQUEST,
@@ -28,6 +29,7 @@ export function getDummyTokenBalanceFailure(error: string) {
   }
 }
 
+// Token Balance
 export type GetDummyBalanceRequestAction = ReturnType<
   typeof getDummyTokenBalanceRequest
 >
