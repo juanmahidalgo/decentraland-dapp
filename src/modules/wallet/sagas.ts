@@ -45,6 +45,7 @@ export function* walletSaga() {
   ])
 }
 
+// TODO: abstract this to its own module
 // force redirect to / if not connected
 export function* handleLocationChange() {
   const connected: ReturnType<typeof isConnected> = yield select(isConnected)
