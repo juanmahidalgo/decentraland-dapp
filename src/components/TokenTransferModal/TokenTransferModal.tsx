@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Button, Field, Modal } from 'decentraland-ui'
 import { Props } from './TokenTransferModal.types'
 import { ETH_ADDRESS_REGEX } from '../../utils/address'
-import { Transfer, TransferStatus } from '../../modules/transfer/types'
 
 type Inputs = {
   amount: string

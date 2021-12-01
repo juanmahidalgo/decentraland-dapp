@@ -21,14 +21,6 @@ export function tokenReducer(
   action: AnyAction
 ): TransfersState {
   switch (action.type) {
-    // case TRANSFER_TOKEN_REQUEST: {
-    //   const { to, amount } =
-    //     action.payload as TransferTokenRequestAction['payload']
-    //   return {
-    //     ...state,
-    //   }
-    // }
-
     case TOGGLE_TRANSFER_MODAL_REQUEST: {
       const { opened } = action.payload as ToggleTransferModalRequest['payload']
       return {

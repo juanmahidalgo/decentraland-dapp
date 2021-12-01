@@ -22,7 +22,6 @@ const App: React.FC<Props> = ({
   error,
   dummyBalance,
   isFetchingDummyTokenBalance,
-  pendingTransactions,
   isTransferModalOpened,
   onOpenTransferModal,
 }) => {

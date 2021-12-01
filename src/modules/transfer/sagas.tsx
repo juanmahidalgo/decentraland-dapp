@@ -16,7 +16,6 @@ import {
 import { toastSaga } from 'decentraland-dapps/dist/modules/toast/sagas'
 import { WindowWithEthereum } from './types'
 import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
-import { ChainId } from '../types'
 import { getAddress } from '../wallet/selectors'
 
 // The regular `window` object with `ethereum` injected by MetaMask
@@ -70,10 +69,6 @@ function* handleTokenTransfer(action: TransferTokenRequestAction) {
     const {
       payload: { amount, to },
     } = action
-    console.log('Transferring!!!')
-    console.log('amount: ', amount)
-    console.log('to: ', to)
-    // const address: ReturnType<typeof getAddress> = yield select(getAddress)
     const provider = new ethers.providers.Web3Provider(
       windowWithEthereum.ethereum
     )
@@ -84,10 +79,6 @@ function* handleTokenTransfer(action: TransferTokenRequestAction) {
     console.log('tx: ', tx)
     const txReceipt: TransactionReceipt = yield call(() => tx.wait())
     console.log('txReceipt: ', txReceipt)
-    const chainId: ChainId = yield call(() => signer.getChainId())
-    console.log('chainId: ', chainId)
-    const address: ReturnType<typeof getAddress> = yield select(getAddress)
-    // yield put(transferTokenSuccess(chainId, tx.hash, address))
     yield put(transferTokenSuccess(tx.hash))
   } catch (error: any) {
     console.log('error: ', error)
