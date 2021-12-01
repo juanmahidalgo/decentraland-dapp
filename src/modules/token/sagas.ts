@@ -4,9 +4,9 @@ import { TRANSFER_TOKEN_SUCESSS } from '../transfer/actions'
 import { CONNECT_WALLET_SUCCESS } from '../wallet/actions'
 import { getAddress } from '../wallet/selectors'
 import {
-  getDummyTokenBalanceFailure,
-  getDummyTokenBalanceRequest,
-  getDummyTokenBalanceSuccess,
+  getTokenBalanceFailure,
+  getTokenBalanceRequest,
+  getTokenBalanceSuccess,
   GET_TOKEN_BALANCE_REQUEST,
 } from './actions'
 import { WindowWithEthereum } from './types'
@@ -26,20 +26,20 @@ export const TOKEN_ABI = [
   'function transfer(address to, uint amount)',
 ]
 
-export function* dummyTokenSaga() {
+export function* tokenSaga() {
   yield takeEvery(
     [CONNECT_WALLET_SUCCESS, TRANSFER_TOKEN_SUCESSS],
     function* () {
-      yield put(getDummyTokenBalanceRequest())
+      yield put(getTokenBalanceRequest())
     }
   )
   yield takeEvery(
     GET_TOKEN_BALANCE_REQUEST,
-    handleGetDummyTokenBalanceRequestHandler
+    handleGetTokenBalanceRequestHandler
   )
 }
 
-function* handleGetDummyTokenBalanceRequestHandler() {
+function* handleGetTokenBalanceRequestHandler() {
   try {
     const address: ReturnType<typeof getAddress> = yield select(getAddress)
     const provider = new ethers.providers.Web3Provider(
@@ -49,8 +49,8 @@ function* handleGetDummyTokenBalanceRequestHandler() {
     const balance: number = yield call(() => token.balanceOf(address))
     const formattedBalance = balance.toString()
     // const formattedBalance = ethers.utils.formatEther(balance)
-    yield put(getDummyTokenBalanceSuccess(formattedBalance))
+    yield put(getTokenBalanceSuccess(formattedBalance))
   } catch (error: any) {
-    yield put(getDummyTokenBalanceFailure(error.message))
+    yield put(getTokenBalanceFailure(error.message))
   }
 }

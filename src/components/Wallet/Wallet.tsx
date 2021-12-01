@@ -3,7 +3,7 @@ import { Button, Card, Header } from 'decentraland-ui'
 import { Props } from './Wallet.types'
 import { Link } from 'react-router-dom'
 
-const Wallet: React.FC<Props> = ({ address, dummyBalance }) => {
+const Wallet: React.FC<Props> = ({ address, tokenBalance }) => {
   return (
     <Card>
       <Header>Wallet</Header>
@@ -13,7 +13,7 @@ const Wallet: React.FC<Props> = ({ address, dummyBalance }) => {
       </p>
       <div className="balance-container">
         <span>
-          <strong>Balance:</strong> {dummyBalance}
+          <strong>Balance:</strong> {tokenBalance}
         </span>
         <Link to="/transfer">
           <Button basic>Transfer</Button>

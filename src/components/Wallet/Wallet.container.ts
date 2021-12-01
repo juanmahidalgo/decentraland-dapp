@@ -7,7 +7,7 @@ import { getBalance } from '../../modules/token/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
   address: getAddress(state),
-  dummyBalance: getBalance(state),
+  tokenBalance: getBalance(state),
 })
 
 export default connect(mapState)(Wallet)

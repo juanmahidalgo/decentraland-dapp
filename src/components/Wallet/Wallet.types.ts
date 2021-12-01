@@ -3,8 +3,8 @@ import { ConnectWalletRequestAction } from '../../modules/wallet/actions'
 
 export type Props = {
   address: string
-  dummyBalance: string | null
+  tokenBalance: string | null
 }
 
-export type MapStateProps = Pick<Props, 'address' | 'dummyBalance'>
+export type MapStateProps = Pick<Props, 'address' | 'tokenBalance'>
 export type MapDispatch = Dispatch<ConnectWalletRequestAction | AnyAction>

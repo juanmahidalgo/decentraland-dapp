@@ -12,7 +12,7 @@ const INITIAL_STATE: WalletState = {
   address: null,
   isConnecting: false,
   error: null,
-  dummyBalance: null,
+  tokenBalance: null,
 }
 
 export function walletReducer(

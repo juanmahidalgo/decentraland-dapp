@@ -11,7 +11,7 @@ import { TokenState } from './types'
 const INITIAL_STATE: TokenState = {
   isFetching: false,
   error: null,
-  dummyBalance: null,
+  tokenBalance: null,
 }
 
 export function tokenReducer(
@@ -31,7 +31,7 @@ export function tokenReducer(
       return {
         ...state,
         isFetching: false,
-        dummyBalance: balance,
+        tokenBalance: balance,
         error: null,
       }
     }

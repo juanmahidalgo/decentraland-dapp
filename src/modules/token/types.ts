@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 
 export type TokenState = {
-  dummyBalance: string | null
+  tokenBalance: string | null
   isFetching: boolean
   error: string | null
 }
