@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { TRANSFER_TOKEN_SUCESSS } from '../transfer/actions'
 import { CONNECT_WALLET_SUCCESS } from '../wallet/actions'
 import { getAddress } from '../wallet/selectors'
 import {
@@ -26,9 +27,12 @@ export const TOKEN_ABI = [
 ]
 
 export function* dummyTokenSaga() {
-  yield takeEvery(CONNECT_WALLET_SUCCESS, function* () {
-    yield put(getDummyTokenBalanceRequest())
-  })
+  yield takeEvery(
+    [CONNECT_WALLET_SUCCESS, TRANSFER_TOKEN_SUCESSS],
+    function* () {
+      yield put(getDummyTokenBalanceRequest())
+    }
+  )
   yield takeEvery(
     GET_TOKEN_BALANCE_REQUEST,
     handleGetDummyTokenBalanceRequestHandler

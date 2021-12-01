@@ -1,19 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
+import ToastProvider from 'decentraland-dapps/dist/providers/ToastProvider'
 import {
   Button,
   Card,
   Center,
-  Field,
   Footer,
   Header,
   Loader,
-  Modal,
   Navbar,
   Page,
 } from 'decentraland-ui'
 import { Props } from './App.types'
 import './App.css'
-import TokenTransferModal from '../TokenTransferModal/TokenTransferModal'
+import { TokenTransferModal } from '../TokenTransferModal'
 
 const App: React.FC<Props> = ({
   address,
@@ -23,13 +22,11 @@ const App: React.FC<Props> = ({
   error,
   dummyBalance,
   isFetchingDummyTokenBalance,
+  isTransferModalOpened,
+  onOpenTransferModal,
 }) => {
-  console.log('dummyBalance: ', dummyBalance)
-  console.log('isFetchingDummyTokenBalance: ', isFetchingDummyTokenBalance)
-  const [showTransferModal, setShowTransferModal] = useState(false)
-
   return (
-    <>
+    <ToastProvider position="bottom right">
       <Navbar />
       <Page className="App">
         <Center>
@@ -56,7 +53,7 @@ const App: React.FC<Props> = ({
                     dummyBalance
                   )}
                 </span>
-                <Button basic onClick={() => setShowTransferModal(true)}>
+                <Button basic onClick={() => onOpenTransferModal(true)}>
                   Transfer
                 </Button>
               </div>
@@ -66,10 +63,10 @@ const App: React.FC<Props> = ({
       </Page>
       <Footer />
       <TokenTransferModal
-        opened={showTransferModal}
-        onClose={() => setShowTransferModal(false)}
+        opened={isTransferModalOpened}
+        onClose={() => onOpenTransferModal(false)}
       />
-    </>
+    </ToastProvider>
   )
 }
 
