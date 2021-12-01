@@ -1,9 +1,10 @@
 import React from 'react'
-import { Button, Card, Header } from 'decentraland-ui'
+import { Button, Card, Header, Loader } from 'decentraland-ui'
 import { Props } from './Wallet.types'
 import { Link } from 'react-router-dom'
 
 const Wallet: React.FC<Props> = ({ address, tokenBalance }) => {
+  if (!tokenBalance) return <Loader />
   return (
     <Card>
       <Header>Wallet</Header>
