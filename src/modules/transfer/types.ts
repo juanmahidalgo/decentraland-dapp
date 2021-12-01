@@ -15,7 +15,6 @@ export type Transfer = {
 }
 
 export type TransferModal = {
-  opened: boolean
   sendButtonLoading: boolean
 }
 

@@ -3,9 +3,6 @@ import { TransferStatus } from './types'
 
 export const getState = (state: RootState) => state.transfers
 
-export const getIsTransferModalOpened = (state: RootState) =>
-  getState(state).modal.opened
-
 export const getIsTransferButtonLoading = (state: RootState) =>
   getState(state).modal.sendButtonLoading
 

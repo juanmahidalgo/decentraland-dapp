@@ -10,7 +10,6 @@ type Inputs = {
 }
 
 const TokenTransferModal: React.FC<Props> = ({
-  opened,
   onClose,
   onTransfer,
   isTranferButtonLoading,
@@ -45,7 +44,7 @@ const TokenTransferModal: React.FC<Props> = ({
     : {}
 
   return (
-    <Modal size="small" open={opened} onClose={onClose}>
+    <Modal size="small" open={true} onClose={onClose}>
       <Modal.Header>Transfer</Modal.Header>
       <Modal.Content>
         <form onSubmit={handleSubmit(onTransferHandler)}>

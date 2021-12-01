@@ -2,11 +2,9 @@ import { AnyAction, Dispatch } from 'redux'
 import { ConnectWalletRequestAction } from '../../modules/wallet/actions'
 
 export type Props = {
-  onConnect: () => void
-  isConnecting: boolean
-  error: string | null
+  address: string
+  dummyBalance: string | null
 }
 
-export type MapStateProps = Pick<Props, 'isConnecting' | 'error'>
-export type MapDispatchProps = Pick<Props, 'onConnect'>
+export type MapStateProps = Pick<Props, 'address' | 'dummyBalance'>
 export type MapDispatch = Dispatch<ConnectWalletRequestAction | AnyAction>
