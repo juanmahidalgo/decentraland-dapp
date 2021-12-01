@@ -8,10 +8,12 @@ import TokenTransferModal from './TokenTransferModal'
 import { transferTokenRequest } from '../../modules/transfer/actions'
 import { getIsTransferButtonLoading } from '../../modules/transfer/selectors'
 import { RootState } from '../../modules/types'
+import { push } from 'connected-react-router'
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onTransfer: (amount: string, address: string) =>
     dispatch(transferTokenRequest(address, amount)),
+  onClose: () => dispatch(push('/wallet')),
 })
 
 const mapState = (state: RootState): MapStateProps => ({

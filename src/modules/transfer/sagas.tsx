@@ -1,9 +1,6 @@
 import { ethers } from 'ethers'
-import {
-  TransactionReceipt,
-  TransactionResponse,
-} from '@ethersproject/providers'
-import { all, call, put, takeEvery } from 'redux-saga/effects'
+import { TransactionResponse } from '@ethersproject/providers'
+import { call, put, takeEvery } from 'redux-saga/effects'
 import {
   setTransferModalButtonLoading,
   transferTokenFailure,
@@ -15,7 +12,8 @@ import {
   TRANSFER_TOKEN_REQUEST,
   TRANSFER_TOKEN_SUCESSS,
 } from './actions'
-import { toastSaga } from 'decentraland-dapps/dist/modules/toast/sagas'
+import { push } from 'connected-react-router'
+
 import { WindowWithEthereum } from './types'
 import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 
@@ -40,10 +38,6 @@ const TOAST_BASE_PROPS = {
 }
 
 export function* tokenTransferSaga() {
-  yield all([toastSaga(), customTokenTransferSaga()])
-}
-
-export function* customTokenTransferSaga() {
   yield takeEvery(TRANSFER_TOKEN_REQUEST, handleTokenTransfer)
   yield takeEvery(TRANSFER_TOKEN_SUCESSS, handleTokenTransferSuccess)
   yield takeEvery(TRANSFER_TOKEN_FAILURE, handleTokenTransferFailure)
@@ -100,15 +94,16 @@ function* handleTokenTransfer(action: TransferTokenRequestAction) {
     const tx: TransactionResponse = yield call(() => token.transfer(to, amount))
     yield put(transferTokenPending(tx.hash, amount, to))
     try {
-      console.log('tx: ', tx)
-      const txReceipt: TransactionReceipt = yield call(() => tx.wait())
-      console.log('txReceipt: ', txReceipt)
+      // wait for the tx to finish
+      yield call(() => tx.wait())
       yield put(transferTokenSuccess(tx.hash))
     } catch (error) {
       yield put(transferTokenFailure('tx.hash', 'Tx failed'))
+    } finally {
+      yield put(push('/wallet'))
     }
   } catch (error: any) {
-    console.log('error: ', error)
+    console.error('error: ', error)
     yield put(
       showToast({
         title: 'Transfer rejected!',

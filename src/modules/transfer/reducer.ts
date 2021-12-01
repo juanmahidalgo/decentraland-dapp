@@ -6,8 +6,6 @@ import {
   TransferTokenFailureAction,
   TRANSFER_TOKEN_PENDING,
   TransferTokenPendingAction,
-  TOGGLE_TRANSFER_MODAL_REQUEST,
-  ToggleTransferModalRequest,
   TRANSFER_TOKEN_REQUEST,
   SET_TRANSFER_LOADING_BUTTON,
 } from './actions'
@@ -16,7 +14,6 @@ import { Transfer, TransfersState, TransferStatus } from './types'
 const INITIAL_STATE: TransfersState = {
   transfers: [],
   modal: {
-    opened: false,
     sendButtonLoading: false,
   },
 }
@@ -26,17 +23,6 @@ export function tokenReducer(
   action: AnyAction
 ): TransfersState {
   switch (action.type) {
-    case TOGGLE_TRANSFER_MODAL_REQUEST: {
-      const { opened } = action.payload as ToggleTransferModalRequest['payload']
-      return {
-        ...state,
-        modal: {
-          opened: opened,
-          sendButtonLoading: false,
-        },
-      }
-    }
-
     case TRANSFER_TOKEN_REQUEST: {
       return {
         ...state,
@@ -83,7 +69,6 @@ export function tokenReducer(
           { ...transfer },
         ],
         modal: {
-          opened: false,
           sendButtonLoading: false,
         },
       }
@@ -104,7 +89,6 @@ export function tokenReducer(
           { ...transfer },
         ],
         modal: {
-          opened: false,
           sendButtonLoading: false,
         },
       }

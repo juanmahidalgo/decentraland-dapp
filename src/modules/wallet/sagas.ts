@@ -1,11 +1,20 @@
 import { ethers } from 'ethers'
-import { call, put, takeEvery } from 'redux-saga/effects'
+import {
+  all,
+  call,
+  put,
+  takeEvery,
+  takeLatest,
+  select,
+} from 'redux-saga/effects'
+import { push, LOCATION_CHANGE, getLocation } from 'connected-react-router'
 import {
   connectWalletFailure,
   connectWalletSuccess,
   CONNECT_WALLET_REQUEST,
 } from './actions'
 import { WindowWithEthereum } from './types'
+import { isConnected } from './selectors'
 
 // The regular `window` object with `ethereum` injected by MetaMask
 const windowWithEthereum = window as unknown as WindowWithEthereum
@@ -30,7 +39,23 @@ export const TOKEN_ABI = [
 ]
 
 export function* walletSaga() {
-  yield takeEvery(CONNECT_WALLET_REQUEST, handleConnectWalletRequest)
+  yield all([
+    takeEvery(CONNECT_WALLET_REQUEST, handleConnectWalletRequest),
+    takeLatest(LOCATION_CHANGE, handleLocationChange),
+  ])
+}
+
+// force redirect to / if not connected
+export function* handleLocationChange() {
+  const connected: ReturnType<typeof isConnected> = yield select(isConnected)
+  const location: ReturnType<typeof getLocation> = yield select(getLocation)
+
+  if (
+    (location.pathname === '/wallet' || location.pathname === '/transfer') &&
+    !connected
+  ) {
+    yield put(push('/'))
+  }
 }
 
 function* handleConnectWalletRequest() {
@@ -42,6 +67,7 @@ function* handleConnectWalletRequest() {
     const signer = provider.getSigner()
     const address: string = yield call(() => signer.getAddress())
     yield put(connectWalletSuccess(address))
+    yield put(push('/wallet'))
   } catch (error: any) {
     yield put(connectWalletFailure(error.message))
   }
