@@ -8,12 +8,17 @@ import {
   TransferTokenPendingAction,
   TOGGLE_TRANSFER_MODAL_REQUEST,
   ToggleTransferModalRequest,
+  TRANSFER_TOKEN_REQUEST,
+  SET_TRANSFER_LOADING_BUTTON,
 } from './actions'
 import { Transfer, TransfersState, TransferStatus } from './types'
 
 const INITIAL_STATE: TransfersState = {
   transfers: [],
-  isModalOpened: false,
+  modal: {
+    opened: false,
+    sendButtonLoading: false,
+  },
 }
 
 export function tokenReducer(
@@ -25,7 +30,31 @@ export function tokenReducer(
       const { opened } = action.payload as ToggleTransferModalRequest['payload']
       return {
         ...state,
-        isModalOpened: opened,
+        modal: {
+          opened: opened,
+          sendButtonLoading: false,
+        },
+      }
+    }
+
+    case TRANSFER_TOKEN_REQUEST: {
+      return {
+        ...state,
+        modal: {
+          ...state.modal,
+          sendButtonLoading: true,
+        },
+      }
+    }
+
+    case SET_TRANSFER_LOADING_BUTTON: {
+      const { loading } = action.payload
+      return {
+        ...state,
+        modal: {
+          ...state.modal,
+          sendButtonLoading: loading,
+        },
       }
     }
 
@@ -53,7 +82,10 @@ export function tokenReducer(
           ...state.transfers.filter((t) => t.txHash !== txHash),
           { ...transfer },
         ],
-        isModalOpened: false,
+        modal: {
+          opened: false,
+          sendButtonLoading: false,
+        },
       }
     }
 
@@ -71,7 +103,10 @@ export function tokenReducer(
           ...state.transfers.filter((t) => t.txHash !== txHash),
           { ...transfer },
         ],
-        isModalOpened: false,
+        modal: {
+          opened: false,
+          sendButtonLoading: false,
+        },
       }
     }
 

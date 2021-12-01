@@ -14,9 +14,14 @@ export type Transfer = {
   error?: string | null
 }
 
+export type TransferModal = {
+  opened: boolean
+  sendButtonLoading: boolean
+}
+
 export type TransfersState = {
   transfers: Transfer[]
-  isModalOpened: boolean
+  modal: TransferModal
 }
 
 export type WindowWithEthereum = Window & {

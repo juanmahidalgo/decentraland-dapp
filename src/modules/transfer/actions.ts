@@ -1,4 +1,5 @@
 // Transfer Token
+export const SET_TRANSFER_LOADING_BUTTON = 'Reset Toggle Transfer Modal'
 export const TOGGLE_TRANSFER_MODAL_REQUEST = '[Request] Toggle Transfer Modal'
 export const TRANSFER_TOKEN_REQUEST = '[Request] Transfer Token'
 export const TRANSFER_TOKEN_PENDING = '[Pending] Transfer Token'
@@ -53,6 +54,15 @@ export function toggleTransferModalRequest(opened: boolean) {
   }
 }
 
+export function setTransferModalButtonLoading(loading: boolean) {
+  return {
+    type: SET_TRANSFER_LOADING_BUTTON,
+    payload: {
+      loading,
+    },
+  }
+}
+
 // Token Transfer
 export type TransferTokenRequestAction = ReturnType<typeof transferTokenRequest>
 export type TransferTokenPendingAction = ReturnType<typeof transferTokenPending>
@@ -60,4 +70,7 @@ export type TransferTokenSuccessAction = ReturnType<typeof transferTokenSuccess>
 export type TransferTokenFailureAction = ReturnType<typeof transferTokenFailure>
 export type ToggleTransferModalRequest = ReturnType<
   typeof toggleTransferModalRequest
+>
+export type SetTransferModalButtonLoading = ReturnType<
+  typeof setTransferModalButtonLoading
 >

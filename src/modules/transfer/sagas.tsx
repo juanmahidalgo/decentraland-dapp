@@ -3,20 +3,21 @@ import {
   TransactionReceipt,
   TransactionResponse,
 } from '@ethersproject/providers'
-import { all, call, put, select, takeEvery } from 'redux-saga/effects'
+import { all, call, put, takeEvery } from 'redux-saga/effects'
 import {
+  setTransferModalButtonLoading,
   transferTokenFailure,
   transferTokenPending,
   TransferTokenRequestAction,
   transferTokenSuccess,
   TransferTokenSuccessAction,
+  TRANSFER_TOKEN_FAILURE,
   TRANSFER_TOKEN_REQUEST,
   TRANSFER_TOKEN_SUCESSS,
 } from './actions'
 import { toastSaga } from 'decentraland-dapps/dist/modules/toast/sagas'
 import { WindowWithEthereum } from './types'
 import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
-import { getAddress } from '../wallet/selectors'
 
 // The regular `window` object with `ethereum` injected by MetaMask
 const windowWithEthereum = window as unknown as WindowWithEthereum
@@ -33,6 +34,11 @@ export const TOKEN_ABI = [
   'function transfer(address to, uint amount)',
 ]
 
+const TOAST_BASE_PROPS = {
+  closable: true,
+  timeout: 2000,
+}
+
 export function* tokenTransferSaga() {
   yield all([toastSaga(), customTokenTransferSaga()])
 }
@@ -40,10 +46,10 @@ export function* tokenTransferSaga() {
 export function* customTokenTransferSaga() {
   yield takeEvery(TRANSFER_TOKEN_REQUEST, handleTokenTransfer)
   yield takeEvery(TRANSFER_TOKEN_SUCESSS, handleTokenTransferSuccess)
+  yield takeEvery(TRANSFER_TOKEN_FAILURE, handleTokenTransferFailure)
 }
 
 function* handleTokenTransferSuccess(action: TransferTokenSuccessAction) {
-  console.log('handeling success!!')
   const {
     payload: { txHash },
   } = action
@@ -51,18 +57,35 @@ function* handleTokenTransferSuccess(action: TransferTokenSuccessAction) {
   yield put(
     showToast({
       title: 'Transfer sent successfully!',
-      body: (
-        <a
-          href={`https://etherscan.io/tx/${txHash}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Open in Etherscan
-        </a>
-      ),
+      body: getEtherscanLink(txHash),
+      ...TOAST_BASE_PROPS,
     })
   )
 }
+
+function* handleTokenTransferFailure(action: TransferTokenSuccessAction) {
+  const {
+    payload: { txHash },
+  } = action
+  // TODO: use a util to build the current network tx
+  yield put(
+    showToast({
+      title: 'Transfer failed!',
+      body: getEtherscanLink(txHash),
+      ...TOAST_BASE_PROPS,
+    })
+  )
+}
+
+const getEtherscanLink = (txHash: string) => (
+  <a
+    href={`https://etherscan.io/tx/${txHash}`}
+    target="_blank"
+    rel="noreferrer"
+  >
+    Open in Etherscan
+  </a>
+)
 
 function* handleTokenTransfer(action: TransferTokenRequestAction) {
   try {
@@ -76,12 +99,23 @@ function* handleTokenTransfer(action: TransferTokenRequestAction) {
     const token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer)
     const tx: TransactionResponse = yield call(() => token.transfer(to, amount))
     yield put(transferTokenPending(tx.hash, amount, to))
-    console.log('tx: ', tx)
-    const txReceipt: TransactionReceipt = yield call(() => tx.wait())
-    console.log('txReceipt: ', txReceipt)
-    yield put(transferTokenSuccess(tx.hash))
+    try {
+      console.log('tx: ', tx)
+      const txReceipt: TransactionReceipt = yield call(() => tx.wait())
+      console.log('txReceipt: ', txReceipt)
+      yield put(transferTokenSuccess(tx.hash))
+    } catch (error) {
+      yield put(transferTokenFailure('tx.hash', 'Tx failed'))
+    }
   } catch (error: any) {
     console.log('error: ', error)
-    yield put(transferTokenFailure('tx.hash', 'Tx failed'))
+    yield put(
+      showToast({
+        title: 'Transfer rejected!',
+        body: 'The transaction was rejected',
+        ...TOAST_BASE_PROPS,
+      })
+    )
+    yield put(setTransferModalButtonLoading(false))
   }
 }

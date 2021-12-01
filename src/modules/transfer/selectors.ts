@@ -4,7 +4,10 @@ import { TransferStatus } from './types'
 export const getState = (state: RootState) => state.transfers
 
 export const getIsTransferModalOpened = (state: RootState) =>
-  getState(state).isModalOpened
+  getState(state).modal.opened
+
+export const getIsTransferButtonLoading = (state: RootState) =>
+  getState(state).modal.sendButtonLoading
 
 export const getLatestTransfer = (state: RootState) =>
   getState(state).transfers[getState(state).transfers.length - 1]

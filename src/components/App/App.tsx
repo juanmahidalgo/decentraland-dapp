@@ -6,7 +6,6 @@ import {
   Center,
   Footer,
   Header,
-  Loader,
   Navbar,
   Page,
 } from 'decentraland-ui'
@@ -30,7 +29,7 @@ const App: React.FC<Props> = ({
       <Navbar />
       <Page className="App">
         <Center>
-          {!isConnected ? (
+          {!isConnected || isFetchingDummyTokenBalance ? (
             <>
               <Button primary onClick={onConnect} loading={isConnecting}>
                 Connect
@@ -46,12 +45,7 @@ const App: React.FC<Props> = ({
               </p>
               <div className="balance-container">
                 <span>
-                  <strong>Balance:</strong>&nbsp;
-                  {isFetchingDummyTokenBalance ? (
-                    <Loader active size="mini" />
-                  ) : (
-                    dummyBalance
-                  )}
+                  <strong>Balance:</strong> {dummyBalance}
                 </span>
                 <Button basic onClick={() => onOpenTransferModal(true)}>
                   Transfer

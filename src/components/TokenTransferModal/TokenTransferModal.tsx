@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Button, Field, Modal } from 'decentraland-ui'
 import { Props } from './TokenTransferModal.types'
@@ -13,8 +13,8 @@ const TokenTransferModal: React.FC<Props> = ({
   opened,
   onClose,
   onTransfer,
+  isTranferButtonLoading,
 }) => {
-  const [showLoading, setShowLoading] = useState(false)
   const {
     handleSubmit,
     control,
@@ -24,7 +24,6 @@ const TokenTransferModal: React.FC<Props> = ({
   const onTransferHandler: SubmitHandler<Inputs> = (data) => {
     const { amount, address } = data
     onTransfer(amount, address)
-    setShowLoading(true)
   }
 
   const amountFieldErrors = !!errors.amount
@@ -92,7 +91,7 @@ const TokenTransferModal: React.FC<Props> = ({
         <Button
           primary
           onClick={handleSubmit(onTransferHandler)}
-          loading={showLoading}
+          loading={isTranferButtonLoading}
         >
           SEND
         </Button>
