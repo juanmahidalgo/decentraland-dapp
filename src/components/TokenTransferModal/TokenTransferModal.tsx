@@ -3,6 +3,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Button, Field, Modal } from 'decentraland-ui'
 import { Props } from './TokenTransferModal.types'
 import './TokenTransferModal.css'
+import { ETH_ADDRESS_REGEX } from '../../utils/address'
 
 type Inputs = {
   amount: string
@@ -37,9 +38,9 @@ const App: React.FC<Props> = ({ opened, onClose }) => {
   const addressFieldErrors = !!errors.address
     ? {
         message:
-          errors.address.type === 'pattern'
-            ? 'Please enter a valid ETH address'
-            : 'Please enter the address to transfer',
+          errors.address.type === 'required'
+            ? 'Please enter the address to transfer'
+            : 'Please enter a valid ETH address',
       }
     : {}
 
@@ -54,7 +55,7 @@ const App: React.FC<Props> = ({ opened, onClose }) => {
             rules={{
               required: true,
               validate: {
-                positive: (v) => parseInt(v) > 0,
+                valid: (v) => !isNaN(parseInt(v)) && parseInt(v) > 0,
               },
             }}
             defaultValue=""
@@ -72,7 +73,7 @@ const App: React.FC<Props> = ({ opened, onClose }) => {
         <Controller
           name="address"
           control={control}
-          rules={{ required: true, pattern: /^0x[a-fA-F0-9]{40}$/ }}
+          rules={{ required: true, pattern: ETH_ADDRESS_REGEX }}
           defaultValue=""
           render={({ field }) => (
             <Field
