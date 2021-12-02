@@ -4,11 +4,14 @@ import { call, put, takeEvery } from 'redux-saga/effects'
 import {
   setTransferModalButtonLoading,
   transferTokenFailure,
+  TransferTokenFailureAction,
   transferTokenPending,
+  TransferTokenPendingAction,
   TransferTokenRequestAction,
   transferTokenSuccess,
   TransferTokenSuccessAction,
   TRANSFER_TOKEN_FAILURE,
+  TRANSFER_TOKEN_PENDING,
   TRANSFER_TOKEN_REQUEST,
   TRANSFER_TOKEN_SUCESSS,
 } from './actions'
@@ -32,13 +35,14 @@ export const TOKEN_ABI = [
   'function transfer(address to, uint amount)',
 ]
 
-const TOAST_BASE_PROPS = {
+export const TOAST_BASE_PROPS = {
   closable: true,
   timeout: 2000,
 }
 
 export function* tokenTransferSaga() {
-  yield takeEvery(TRANSFER_TOKEN_REQUEST, handleTokenTransfer)
+  yield takeEvery(TRANSFER_TOKEN_REQUEST, handleTokenTransferRequest)
+  yield takeEvery(TRANSFER_TOKEN_PENDING, handlePendingTransfer)
   yield takeEvery(TRANSFER_TOKEN_SUCESSS, handleTokenTransferSuccess)
   yield takeEvery(TRANSFER_TOKEN_FAILURE, handleTokenTransferFailure)
 }
@@ -57,10 +61,11 @@ function* handleTokenTransferSuccess(action: TransferTokenSuccessAction) {
   )
 }
 
-function* handleTokenTransferFailure(action: TransferTokenSuccessAction) {
+function* handleTokenTransferFailure(action: TransferTokenFailureAction) {
   const {
-    payload: { txHash },
+    payload: { txHash, error },
   } = action
+  // TODO: log this error
   // TODO: use a util to build the current network tx
   yield put(
     showToast({
@@ -71,7 +76,7 @@ function* handleTokenTransferFailure(action: TransferTokenSuccessAction) {
   )
 }
 
-const getEtherscanLink = (txHash: string) => (
+export const getEtherscanLink = (txHash: string) => (
   <a
     href={`https://etherscan.io/tx/${txHash}`}
     target="_blank"
@@ -81,29 +86,24 @@ const getEtherscanLink = (txHash: string) => (
   </a>
 )
 
-function* handleTokenTransfer(action: TransferTokenRequestAction) {
+export function* callTokenTransfer(amount: string, to: string) {
+  const provider = new ethers.providers.Web3Provider(
+    windowWithEthereum.ethereum
+  )
+  const signer = provider.getSigner()
+  const token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer)
+  const tx: TransactionResponse = yield call(() => token.transfer(to, amount))
+  return tx
+}
+
+function* handleTokenTransferRequest(action: TransferTokenRequestAction) {
   try {
     const {
       payload: { amount, to },
     } = action
-    const provider = new ethers.providers.Web3Provider(
-      windowWithEthereum.ethereum
-    )
-    const signer = provider.getSigner()
-    const token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer)
-    const tx: TransactionResponse = yield call(() => token.transfer(to, amount))
+    const tx: TransactionResponse = yield call(callTokenTransfer, amount, to)
     yield put(transferTokenPending(tx.hash, amount, to))
-    try {
-      // wait for the tx to finish
-      yield call(() => tx.wait())
-      yield put(transferTokenSuccess(tx.hash))
-    } catch (error) {
-      yield put(transferTokenFailure('tx.hash', 'Tx failed'))
-    } finally {
-      yield put(push('/wallet'))
-    }
   } catch (error: any) {
-    console.error('error: ', error)
     yield put(
       showToast({
         title: 'Transfer rejected!',
@@ -112,5 +112,31 @@ function* handleTokenTransfer(action: TransferTokenRequestAction) {
       })
     )
     yield put(setTransferModalButtonLoading(false))
+  }
+}
+
+export function* getTxByHash(txHash: string) {
+  const provider = new ethers.providers.Web3Provider(
+    windowWithEthereum.ethereum
+  )
+  const tx: TransactionResponse = yield call(() =>
+    provider.getTransaction(txHash)
+  )
+  return tx
+}
+
+function* handlePendingTransfer(action: TransferTokenPendingAction) {
+  const {
+    payload: { txHash },
+  } = action
+  try {
+    const tx: TransactionResponse = yield call(getTxByHash, txHash)
+    yield call(tx.wait)
+    yield put(transferTokenSuccess(tx.hash))
+  } catch (error: any) {
+    // TODO type this error correctly
+    yield put(transferTokenFailure(txHash, error))
+  } finally {
+    yield put(push('/wallet'))
   }
 }

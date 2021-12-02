@@ -2,10 +2,18 @@
 export const CONNECT_WALLET_REQUEST = '[Request] Connect Wallet'
 export const CONNECT_WALLET_SUCCESS = '[Success] Connect Wallet'
 export const CONNECT_WALLET_FAILURE = '[Failure] Connect Wallet'
+export const ACCOUNT_CHANGED = 'Account Changed'
 
 export function connectWalletRequest() {
   return {
     type: CONNECT_WALLET_REQUEST,
+    payload: {},
+  }
+}
+
+export function accountChanged() {
+  return {
+    type: ACCOUNT_CHANGED,
     payload: {},
   }
 }

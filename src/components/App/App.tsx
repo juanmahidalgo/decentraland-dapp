@@ -1,12 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, Center, Footer, Navbar, Page } from 'decentraland-ui'
 import { Props } from './App.types'
 import { TokenTransferModal } from '../TokenTransferModal'
 import { Route, Switch } from 'react-router'
 import { Wallet } from '../Wallet'
 import './App.css'
+import { windowWithEthereum } from '../../modules/token/types'
 
-const App: React.FC<Props> = ({ onConnect, isConnecting, error }) => {
+const App: React.FC<Props> = ({
+  onConnect,
+  isConnecting,
+  error,
+  onAccountChange,
+}) => {
+  useEffect(() => {
+    //@ts-ignore
+    windowWithEthereum.ethereum.on('accountsChanged', onAccountChange)
+  }, [onAccountChange])
   return (
     <>
       <Navbar />
