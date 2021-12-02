@@ -44,6 +44,7 @@ export function* walletSaga() {
   yield all([
     takeEvery(CONNECT_WALLET_REQUEST, handleConnectWalletRequest),
     takeLatest(LOCATION_CHANGE, handleLocationChange),
+    // takeEvery(CHAIN_CHANGE_REQUEST, handleChainChange),
     // this could be included in the first takeEvery making it an array but I like the ieda of
     // dispatching the "request" rather than calling the handler directly
     takeEvery(ACCOUNT_CHANGED, function* () {

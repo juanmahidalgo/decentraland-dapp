@@ -10,6 +10,7 @@ import { WalletState } from './types'
 
 const INITIAL_STATE: WalletState = {
   address: null,
+  chainId: null,
   isConnecting: false,
   error: null,
   tokenBalance: null,
