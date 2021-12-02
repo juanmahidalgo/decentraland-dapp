@@ -4,8 +4,9 @@ import { Props } from './App.types'
 import { TokenTransferModal } from '../TokenTransferModal'
 import { Route, Switch } from 'react-router'
 import { Wallet } from '../Wallet'
-import './App.css'
 import { windowWithEthereum } from '../../modules/token/types'
+import { NetworkModal } from '../NetworkModal'
+import './App.css'
 
 const App: React.FC<Props> = ({
   onConnect,
@@ -42,6 +43,7 @@ const App: React.FC<Props> = ({
         </Center>
       </Page>
       <Footer />
+      <NetworkModal />
     </>
   )
 }

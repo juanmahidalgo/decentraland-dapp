@@ -63,6 +63,7 @@ function* handleTokenTransferSuccess(action: TransferTokenSuccessAction) {
 
 function* handleTokenTransferFailure(action: TransferTokenFailureAction) {
   const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     payload: { txHash, error },
   } = action
   // TODO: log this error
