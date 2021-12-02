@@ -6,6 +6,8 @@
 
 You will also need to setup a local ethereum development environment and deploy the Dummy Token there, to do that [follow these instructions](https://github.com/decentraland/dummy-token#setup).
 
+Please set the `REACT_APP_TOKEN_ADDRESS` in the `.env` file.
+
 ## Features included
 
 - Routing: Implemented `connected-react-router` to handle the route changes and manage side-effects and components to render.
