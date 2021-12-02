@@ -13,6 +13,7 @@ const TokenTransferModal: React.FC<Props> = ({
   onClose,
   onTransfer,
   isTranferButtonLoading,
+  tokenBalance,
 }) => {
   const {
     handleSubmit,
@@ -30,6 +31,8 @@ const TokenTransferModal: React.FC<Props> = ({
         message:
           errors.amount.type === 'required'
             ? 'Please enter the amount to transfer'
+            : errors.amount.type === 'sufficentBalance'
+            ? 'Insufficient balance'
             : 'Amount must be positive',
       }
     : {}
@@ -55,6 +58,7 @@ const TokenTransferModal: React.FC<Props> = ({
               required: true,
               validate: {
                 valid: (v) => !isNaN(parseInt(v)) && parseInt(v) > 0,
+                sufficentBalance: (v) => !!tokenBalance && tokenBalance > v,
               },
             }}
             defaultValue=""

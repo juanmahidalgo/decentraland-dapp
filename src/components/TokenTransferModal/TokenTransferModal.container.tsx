@@ -9,6 +9,7 @@ import { transferTokenRequest } from '../../modules/transfer/actions'
 import { getIsTransferButtonLoading } from '../../modules/transfer/selectors'
 import { RootState } from '../../modules/types'
 import { push } from 'connected-react-router'
+import { getBalance } from '../../modules/token/selectors'
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onTransfer: (amount: string, address: string) =>
@@ -18,6 +19,7 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
 
 const mapState = (state: RootState): MapStateProps => ({
   isTranferButtonLoading: getIsTransferButtonLoading(state),
+  tokenBalance: getBalance(state),
 })
 
 export default connect(mapState, mapDispatch)(TokenTransferModal)

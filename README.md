@@ -1,26 +1,3 @@
-# Dummy Token UI
-
-A simple UI for a [Dummy Token](https://github.com/decentraland/dummy-token). This frontend allows the user to connect their wallet and see their address. It is built using `react` + `redux` + `redux-saga`.
-
-# Directory structure and standards
-
-The repository splits the `redux` logic into `modules`, which contain all the actions/sagas/reducer/selectors for a specific domain. The `react` components can be found under the `components` directory, each component has its own directory which contains always a `.tsx` file with the component itself and a `.css` file with its styles. The components are always pure, and if they need to be connected to the redux store it is done by wrapping it with a `.container.tsx` file that maps the necessary properties and callbacks to extract the data from the store and dispatch the required actions.
-
-# Task
-
-The current state of the frontend allows the user to connect their wallet and see their address. Your task is add the following features:
-
-- Allow the user to see their Dummy Token balance once their wallet is connected
-- Allow the user to transfer Dummy Tokens
-
-To achieve this you will need to modify the existing redux module and/or add new ones, also you will need to adapt the react components to allow the user to fullfil all the necessary requirements by modifying the existing components/containers and/or adding new ones as well.
-
-You will need to make use of `decentraland-ui` components to build the missing parts of the frontend. You can see examples of the available components here: [Decentraland UI](https://ui.decentraland.org/).
-
-The final state of the frontend should look something like this:
-
-![Screencast](https://user-images.githubusercontent.com/2781777/115337070-bf24b980-a176-11eb-89e5-d4690893271a.gif)
-
 ## Setup
 
 1. Run `cp .env.example .env` and fill the environment variables
@@ -28,3 +5,19 @@ The final state of the frontend should look something like this:
 3. Run `npm start`
 
 You will also need to setup a local ethereum development environment and deploy the Dummy Token there, to do that [follow these instructions](https://github.com/decentraland/dummy-token#setup).
+
+## Features included
+
+- Routing: Implemented `connected-react-router` to handle the route changes and manage side-effects and components to render.
+- Network detection: The project will only allow the user to use the localhost network (ID: 1337). I tried to use `wallet_switchEthereumChain` to change the network programatically but unfortunately looks like MetaMask doesn't support changing it the localhost one.
+  ![image](./docs/wrong-network.png).
+- Account change detection: Re-fetch the token balance on the account change event.
+- Transfer validation: `react-hook-form` was used to provide a basic validation during the token transfer. It will validate the address is a valid ETH one, that the amount is positive and that the user has the balance to make that transfer.
+  ![image](./docs/transfer-validation.png).wrong-network
+- Testing: the logic included in the sagas was testing using `redux-saga-test-plan`.
+
+## Notes
+
+- Note that the `transfer` reducer has a `Transfer[]` in its state. I was planning to create a history of transactions but I was already extended from the original request.
+- A validation that is contract address is valid while fetching the token should be included.
+- I haven't found a use case for using `reselect`. I've used it in the past to avoid heavy computations repetition but I couldn't find a good usage from it in here.
