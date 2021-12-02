@@ -9,7 +9,9 @@ import {
 } from 'redux-saga/effects'
 import { push, LOCATION_CHANGE, getLocation } from 'connected-react-router'
 import {
+  ACCOUNT_CHANGED,
   connectWalletFailure,
+  connectWalletRequest,
   connectWalletSuccess,
   CONNECT_WALLET_REQUEST,
 } from './actions'
@@ -42,11 +44,16 @@ export function* walletSaga() {
   yield all([
     takeEvery(CONNECT_WALLET_REQUEST, handleConnectWalletRequest),
     takeLatest(LOCATION_CHANGE, handleLocationChange),
+    // this could be included in the first takeEvery making it an array but I like the ieda of
+    // dispatching the "request" rather than calling the handler directly
+    takeEvery(ACCOUNT_CHANGED, function* () {
+      yield put(connectWalletRequest())
+    }),
   ])
 }
 
 // TODO: abstract this to its own module
-// force redirect to / if not connected
+// forces redirect to / if not connected
 export function* handleLocationChange() {
   const connected: ReturnType<typeof isConnected> = yield select(isConnected)
   const location: ReturnType<typeof getLocation> = yield select(getLocation)
@@ -58,14 +65,19 @@ export function* handleLocationChange() {
   }
 }
 
+export function* getAddressFromProvider() {
+  const provider = new ethers.providers.Web3Provider(
+    windowWithEthereum.ethereum
+  )
+  yield call(() => provider.send('eth_requestAccounts', []))
+  const signer = provider.getSigner()
+  const address: string = yield call(() => signer.getAddress())
+  return address
+}
+
 function* handleConnectWalletRequest() {
   try {
-    const provider = new ethers.providers.Web3Provider(
-      windowWithEthereum.ethereum
-    )
-    yield call(() => provider.send('eth_requestAccounts', []))
-    const signer = provider.getSigner()
-    const address: string = yield call(() => signer.getAddress())
+    const address: string = yield call(getAddressFromProvider)
     yield put(connectWalletSuccess(address))
     yield put(push('/wallet'))
   } catch (error: any) {
