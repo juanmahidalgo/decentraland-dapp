@@ -39,16 +39,23 @@ export function* tokenSaga() {
   )
 }
 
+export function* getFormattedTokenBalance(address: string) {
+  const provider = new ethers.providers.Web3Provider(
+    windowWithEthereum.ethereum
+  )
+  const token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, provider)
+  const balance: number = yield call(() => token.balanceOf(address))
+  return balance.toString()
+}
+
 function* handleGetTokenBalanceRequestHandler() {
   try {
     const address: ReturnType<typeof getAddress> = yield select(getAddress)
-    const provider = new ethers.providers.Web3Provider(
-      windowWithEthereum.ethereum
+    const formattedBalance: string = yield call(
+      getFormattedTokenBalance,
+      address
     )
-    const token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, provider)
-    const balance: number = yield call(() => token.balanceOf(address))
-    const formattedBalance = balance.toString()
-    // const formattedBalance = ethers.utils.formatEther(balance)
+    // const formattedBalance = ethers.utils.formatEther(balance) // in case the token uses wei
     yield put(getTokenBalanceSuccess(formattedBalance))
   } catch (error: any) {
     yield put(getTokenBalanceFailure(error.message))

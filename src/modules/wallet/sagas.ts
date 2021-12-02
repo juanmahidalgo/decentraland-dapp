@@ -50,7 +50,6 @@ export function* walletSaga() {
 export function* handleLocationChange() {
   const connected: ReturnType<typeof isConnected> = yield select(isConnected)
   const location: ReturnType<typeof getLocation> = yield select(getLocation)
-
   if (
     (location.pathname === '/wallet' || location.pathname === '/transfer') &&
     !connected
