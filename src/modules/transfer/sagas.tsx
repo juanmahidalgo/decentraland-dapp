@@ -66,7 +66,6 @@ function* handleTokenTransferFailure(action: TransferTokenFailureAction) {
     payload: { txHash, error },
   } = action
   // TODO: log this error
-  // console.error('error: ', error)
   // TODO: use a util to build the current network tx
   yield put(
     showToast({
@@ -96,36 +95,6 @@ export function* callTokenTransfer(amount: string, to: string) {
   const tx: TransactionResponse = yield call(() => token.transfer(to, amount))
   return tx
 }
-
-// function* handleTokenTransfer(action: TransferTokenRequestAction) {
-//   try {
-//     const {
-//       payload: { amount, to },
-//     } = action
-
-//     const tx: TransactionResponse = yield call(callTokenTransfer, amount, to)
-//     yield put(transferTokenPending(tx.hash, amount, to))
-//     try {
-//       // wait for the tx to finish
-//       yield call(tx.wait)
-//       yield put(transferTokenSuccess(tx.hash))
-//     } catch (error) {
-//       yield put(transferTokenFailure('tx.hash', 'Tx failed'))
-//     } finally {
-//       yield put(push('/wallet'))
-//     }
-//   } catch (error: any) {
-//     console.error('error: ', error)
-//     yield put(
-//       showToast({
-//         title: 'Transfer rejected!',
-//         body: 'The transaction was rejected',
-//         ...TOAST_BASE_PROPS,
-//       })
-//     )
-//     yield put(setTransferModalButtonLoading(false))
-//   }
-// }
 
 function* handleTokenTransferRequest(action: TransferTokenRequestAction) {
   try {
