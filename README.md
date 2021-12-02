@@ -13,10 +13,10 @@ You will also need to setup a local ethereum development environment and deploy 
   ![image](./docs/wrong-network.png).
 - Account change detection: Re-fetch the token balance on the account change event.
 - Transfer validation: `react-hook-form` was used to provide a basic validation during the token transfer. It will validate the address is a valid ETH one, that the amount is positive and that the user has the balance to make that transfer.
-  ![image](./docs/transfer-validation.png).wrong-network
+  ![image](./docs/transfer-validation.png)
 - Testing: the logic included in the sagas was testing using `redux-saga-test-plan`.
 
-## Notes
+## Notes / Future improvements
 
 - Note that the `transfer` reducer has a `Transfer[]` in its state. I was planning to create a history of transactions but I was already extended from the original request.
 - A validation that is contract address is valid while fetching the token should be included.
