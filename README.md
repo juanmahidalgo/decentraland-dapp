@@ -10,11 +10,12 @@ You will also need to setup a local ethereum development environment and deploy 
 
 - Routing: Implemented `connected-react-router` to handle the route changes and manage side-effects and components to render.
 - Network detection: The project will only allow the user to use the localhost network (ID: 1337). I tried to use `wallet_switchEthereumChain` to change the network programatically but unfortunately looks like MetaMask doesn't support changing it the localhost one.
-  ![image](./docs/wrong-network.png).
+  ![image](./docs/wrong-network.png)
 - Account change detection: Re-fetch the token balance on the account change event.
 - Transfer validation: `react-hook-form` was used to provide a basic validation during the token transfer. It will validate the address is a valid ETH one, that the amount is positive and that the user has the balance to make that transfer.
   ![image](./docs/transfer-validation.png)
 - Testing: the logic included in the sagas was testing using `redux-saga-test-plan`.
+- Toasts: I used the `toast` module from `decentraland-dapps` to manage and render toasts to provide feedback to the user.
 
 ## Notes / Future improvements
 
