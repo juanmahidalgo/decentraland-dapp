@@ -55,7 +55,7 @@ function* handleTokenTransferSuccess(action: TransferTokenSuccessAction) {
   // TODO: use a util to build the current network tx
   yield put(
     showToast({
-      title: 'Transfer sent successfully!',
+      title: 'Transfer sent!',
       body: getEtherscanLink(txHash),
       ...TOAST_BASE_PROPS,
     })
@@ -80,10 +80,6 @@ function* handleTokenTransferFailure(action: TransferTokenFailureAction) {
 
 export const getEtherscanLink = (txHash: string) => {
   const link = `https://${NETWORK_ID_ETHERSCAN_MAP[supportedChain]}.etherscan.io/tx/${txHash}`
-  console.log('supportedChain: ', supportedChain)
-  console.log('NETWORK_ID_ETHERSCAN_MAP: ', NETWORK_ID_ETHERSCAN_MAP)
-  console.log('link: ', link)
-  console.log('txHash: ', txHash)
   return (
     <a href={link} target="_blank" rel="noreferrer">
       Open in Etherscan
