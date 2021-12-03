@@ -17,3 +17,11 @@ export const NETWORK_ID_HEX_MAP = {
   [ChainId.GOERLI]: '0x5',
   [ChainId.LOCAL]: '0x539',
 }
+
+export const NETWORK_ID_ETHERSCAN_MAP = {
+  [ChainId.MAINNET]: '',
+  [ChainId.ROPSTEN]: 'ropsten',
+  [ChainId.RINKEBY]: 'rinkeby',
+  [ChainId.GOERLI]: 'goerli',
+  [ChainId.LOCAL]: '',
+}

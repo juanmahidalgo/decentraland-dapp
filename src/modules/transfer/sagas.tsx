@@ -19,6 +19,7 @@ import { push } from 'connected-react-router'
 
 import { WindowWithEthereum } from './types'
 import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
+import { NETWORK_ID_ETHERSCAN_MAP, supportedChain } from '../../utils/networks'
 
 // The regular `window` object with `ethereum` injected by MetaMask
 const windowWithEthereum = window as unknown as WindowWithEthereum
@@ -79,7 +80,7 @@ function* handleTokenTransferFailure(action: TransferTokenFailureAction) {
 
 export const getEtherscanLink = (txHash: string) => (
   <a
-    href={`https://etherscan.io/tx/${txHash}`}
+    href={`https://${NETWORK_ID_ETHERSCAN_MAP[supportedChain]}.etherscan.io/tx/${txHash}`}
     target="_blank"
     rel="noreferrer"
   >
