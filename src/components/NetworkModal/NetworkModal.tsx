@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react'
 import { Button, Modal } from 'decentraland-ui'
-import {
-  ChainId,
-  LOCALHOST_NETWORK_HEX,
-  supportedChains,
-} from '../../utils/networks'
+import { NETWORK_ID_HEX_MAP, supportedChain } from '../../utils/networks'
 import { Props } from './NetworkModal.types'
 import { windowWithEthereum } from '../../modules/token/types'
 
@@ -27,14 +23,13 @@ const NetworkModal: React.FC<Props> = ({
       //@ts-ignore
       await windowWithEthereum.ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: LOCALHOST_NETWORK_HEX }],
+        params: [{ chainId: NETWORK_ID_HEX_MAP[supportedChain] }],
       })
     } catch (switchError) {
       console.error('switchError: ', switchError)
     }
   }
-  const isChainSupported =
-    chainId && supportedChains.includes(chainId as unknown as ChainId)
+  const isChainSupported = chainId && supportedChain === chainId
   const showShowModal = !!chainId && !isChainSupported
   return (
     <Modal size="small" open={showShowModal}>
