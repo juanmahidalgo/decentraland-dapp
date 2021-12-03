@@ -41,7 +41,7 @@ const NetworkModal: React.FC<Props> = ({
       <Modal.Content>
         Please change your network to the{' '}
         {supportedChainName.charAt(0).toUpperCase() +
-          supportedChainName.slice(1)}
+          supportedChainName.slice(1)}{' '}
         network
       </Modal.Content>
       <Modal.Actions>
