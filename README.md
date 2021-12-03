@@ -1,6 +1,6 @@
 ## Deployed version
 
-- dApp deployed with Vercel: [decentraland-dapp-hzj6pxxqo-juanma06.vercel.app](decentraland-dapp-hzj6pxxqo-juanma06.vercel.app)
+- dApp deployed with Vercel: [https://decentraland-dapp.vercel.app/](https://decentraland-dapp.vercel.app/)
 
 - Dummy contract deployed at Rinkeby: `0x92805969C03C76Df4633Cb94dE16C0b168664760`
 
