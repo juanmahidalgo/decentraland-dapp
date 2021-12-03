@@ -30,4 +30,5 @@ Please set the `REACT_APP_TOKEN_ADDRESS` in the `.env` file.
 - Note that the `transfer` reducer has a `Transfer[]` in its state. I was planning to create a history of transactions but I was already extended from the original request.
 - A validation that is contract address is valid while fetching the token should be included.
 - I haven't found a use case for using `reselect`. I've used it in the past to avoid heavy computations repetition but I couldn't find a good usage from it in here.
-- It would be nice to have listen to the `Transfer` event from the contract so we can update the balance if the user recieves tokens.
+- It would be nice to have listen to the `Transfer` event from the contract so the balance can update if the user recieves tokens.
+- Add a catch for those browsers without a provider injected (if MetaMask is not installed for example)
