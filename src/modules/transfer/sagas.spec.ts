@@ -45,7 +45,7 @@ describe('when the user requests a transfer', () => {
         return expectSaga(tokenTransferSaga)
           .put(
             showToast({
-              title: 'Transfer sent successfully!',
+              title: 'Transfer sent!',
               body: getEtherscanLink(baseMockedTx.hash),
               ...TOAST_BASE_PROPS,
             })
