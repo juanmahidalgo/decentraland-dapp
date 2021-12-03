@@ -58,7 +58,7 @@ const TokenTransferModal: React.FC<Props> = ({
               required: true,
               validate: {
                 valid: (v) => !isNaN(parseInt(v)) && parseInt(v) > 0,
-                sufficentBalance: (v) => !!tokenBalance && tokenBalance > v,
+                sufficentBalance: (v) => !!tokenBalance && tokenBalance >= v,
               },
             }}
             defaultValue=""
