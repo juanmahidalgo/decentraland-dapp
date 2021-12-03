@@ -37,7 +37,7 @@ const NetworkModal: React.FC<Props> = ({
   const showShowModal = !!chainId && !isChainSupported
   return (
     <Modal size="small" open={showShowModal}>
-      <Modal.Header>Network not supported</Modal.Header>
+      <Modal.Header>Network not supported!</Modal.Header>
       <Modal.Content>
         Please change your network to the{' '}
         {supportedChainName.charAt(0).toUpperCase() +
