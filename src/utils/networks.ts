@@ -11,6 +11,8 @@ export enum ChainId {
   LOCAL = 1337,
 }
 
-export const supportedChains = [ChainId.LOCAL]
+export const supportedChains = process.env.REACT_APP_ENABLED_NETWORK
+  ? [parseInt(process.env.REACT_APP_ENABLED_NETWORK, 10)]
+  : [ChainId.LOCAL]
 
 export const LOCALHOST_NETWORK_HEX = '0x539'
