@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react'
 import { Button, Modal } from 'decentraland-ui'
-import { NETWORK_ID_HEX_MAP, supportedChain } from '../../utils/networks'
+import {
+  NETWORK_ID_HEX_MAP,
+  supportedChain,
+  supportedChainName,
+} from '../../utils/networks'
 import { Props } from './NetworkModal.types'
 import { windowWithEthereum } from '../../modules/token/types'
 
@@ -35,7 +39,10 @@ const NetworkModal: React.FC<Props> = ({
     <Modal size="small" open={showShowModal}>
       <Modal.Header>Network not supported</Modal.Header>
       <Modal.Content>
-        Please change your network to the localhost network
+        Please change your network to the{' '}
+        {supportedChainName.charAt(0).toUpperCase() +
+          supportedChainName.slice(1)}
+        network
       </Modal.Content>
       <Modal.Actions>
         <Button primary onClick={handleChangeNetwork}>

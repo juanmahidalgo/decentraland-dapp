@@ -23,5 +23,7 @@ export const NETWORK_ID_ETHERSCAN_MAP = {
   [ChainId.ROPSTEN]: 'ropsten',
   [ChainId.RINKEBY]: 'rinkeby',
   [ChainId.GOERLI]: 'goerli',
-  [ChainId.LOCAL]: '',
+  [ChainId.LOCAL]: 'localhost',
 }
+
+export const supportedChainName = NETWORK_ID_ETHERSCAN_MAP[supportedChain]
